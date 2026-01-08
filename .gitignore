@@ -1,0 +1,10 @@
+# Zig build artifacts
+zig-out/
+zig-cache/
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# IDE settings
+.vscode/
