@@ -1,11 +1,11 @@
 const std = @import("std");
 
 pub fn build(b: *std.Build) void {
-    // Стандартные настройки для текущей системы (когда просто делаешь zig build run)
+    // Standard target options for the current system (when just doing zig build run)
     const target = b.standardTargetOptions(.{});
     const optimize = b.standardOptimizeOption(.{});
 
-    // Основной исполняемый файл
+    // Main executable file
     const exe = b.addExecutable(.{
         .name = "vzor",
         .root_source_file = b.path("src/main.zig"),
@@ -15,16 +15,16 @@ pub fn build(b: *std.Build) void {
 
     b.installArtifact(exe);
 
-    // Команда для запуска (zig build run)
+    // Command to run (zig build run)
     const run_cmd = b.addRunArtifact(exe);
     run_cmd.step.dependOn(b.getInstallStep());
     const run_step = b.step("run", "Run the app");
     run_step.dependOn(&run_cmd.step);
 
-    // --- Кросс-компиляция (Build All) ---
+    // --- Cross-compilation (Build All) ---
     const build_all_step = b.step("build-all", "Build for all platforms");
 
-    // Список таргетов, которые нам нужны
+    // List of targets
     const targets = [_]std.Target.Query{
         .{ .cpu_arch = .x86_64, .os_tag = .linux },
         .{ .cpu_arch = .x86_64, .os_tag = .windows },

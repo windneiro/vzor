@@ -67,7 +67,7 @@ pub fn scanPort(allocator: std.mem.Allocator, ip: []const u8, port: u16, timeout
 
 pub fn scanRangeParallel(allocator: std.mem.Allocator, ip: []const u8, ports: []const u16) ![]ScanResult {
     const results = try allocator.alloc(ScanResult, ports.len);
-    // Инициализируем результаты дефолтными значениями
+    // Initialize results with default values
     for (results) |*r| {
         r.* = .{ .port = 0, .is_open = false };
     }
@@ -78,10 +78,10 @@ pub fn scanRangeParallel(allocator: std.mem.Allocator, ip: []const u8, ports: []
     for (ports, 0..) |port, i| {
         threads[i] = try std.Thread.spawn(.{}, struct {
             fn worker(alloc: std.mem.Allocator, ip_addr: []const u8, p: u16, res_ptr: *ScanResult) void {
-                // Записываем результат напрямую в память по указателю
+                // We write the result directly into memory using the pointer
                 res_ptr.* = scanPort(alloc, ip_addr, p, config.DEFAULT_TIMEOUT_MS) catch |err| {
                     res_ptr.* = .{ .port = p, .is_open = false, .error_msg = @errorName(err) };
-                    return; // Просто выходим, ничего не возвращая
+                    return; // We just leave without returning anything
                 };
             }
         }.worker, .{ allocator, ip, port, &results[i] });

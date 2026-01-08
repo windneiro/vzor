@@ -13,14 +13,14 @@ pub fn main() !void {
 
     const stdout = std.io.getStdOut().writer();
     const start_time = utils.getTimestampMs();
-    // Получаем аргументы командной строки
+    // Getting command line arguments
     var args = try std.process.argsWithAllocator(allocator);
     defer args.deinit();
 
-    // Пропускаем имя самой программы (первый аргумент)
+    // Skip the name of the program itself (first argument)
     _ = args.next();
 
-    // Если аргумент передан — используем его, иначе дефолт
+    // If an argument is passed — use it, otherwise default
     const target = args.next() orelse "127.0.0.1";
 
     try stdout.print(config.UI.welcome, .{ config.APP_NAME, config.APP_VERSION });
