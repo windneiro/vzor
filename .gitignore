@@ -1,0 +1,10 @@
+.zig-cache/
+zig-out/
+
+audit.log
+audit-scan.json
+report.html
+scan.json
+*.tmp
+
+*.pdb
